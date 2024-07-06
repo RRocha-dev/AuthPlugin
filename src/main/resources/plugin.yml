@@ -5,6 +5,9 @@ author: Rick Rocha
 description: My First AuthPlugin
 
 commands:
-  auth:
-    description: A command to authenticate users.
-    usage: /<command>
+  register:
+    description: Register a new user.
+    usage: /register <password> <confirm password>
+  login:
+    description: Login a user.
+    usage: /login <password>

@@ -1,9 +1,14 @@
 package com.rickrocha;
 
+import java.util.Arrays;
+
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import com.rickrocha.commands.LoginCommand;
+import com.rickrocha.commands.RegisterCommand;
+import com.rickrocha.commands.manager.CommandManager;
 import com.rickrocha.jdbc.config.MySQLConfig;
 import com.rickrocha.jdbc.config.SqLiteConfig;
 import com.rickrocha.jdbc.interfaces.DatabaseConfig;
@@ -24,19 +29,24 @@ public class AuthPlugin extends JavaPlugin {
     @Getter
     private AuthManager authManager;
     private FileConfiguration config;
+    private CommandManager commandManager;
 
     @Override
     public void onEnable() {
-        messageSender = new MessageSenderImpl();
-        authManager = new AuthManagerImpl();
-
+        saveDefaultConfig();
         config = getConfig();
 
         DatabaseManager databaseManager = initializeDatabase();
         databaseManager.createTable();
 
+        messageSender = new MessageSenderImpl();
+        authManager = new AuthManagerImpl(databaseManager);
+
         EventListenerManager listenerManager = new EventListenerManager(this);
         listenerManager.registerEvents();
+
+        commandManager = new CommandManager(this);
+        commandManager.registerCommands(Arrays.asList(new RegisterCommand(authManager), new LoginCommand(authManager)));
 
         messageSender.sendSucefullConsoleMessage("Plugin Iniciado Com Sucesso!");
     }

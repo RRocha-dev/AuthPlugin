@@ -1,7 +1,9 @@
 package com.rickrocha.manager.interfaces;
 
-import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+
+import org.bukkit.entity.Player;
 
 public interface AuthManager {
     public boolean authenticatePlayer (UUID playerUUID);
@@ -10,5 +12,9 @@ public interface AuthManager {
 
     public void removeAuthenticatedPlayer(UUID playerUUID);
 
-    public Set<UUID> getAuthenticatedPlayers();
+    public ConcurrentHashMap<UUID, Boolean> getAuthenticatedPlayers();
+
+    public boolean registerUser(Player player, String username, String password);
+
+    public boolean userExists(Player player);
 }
