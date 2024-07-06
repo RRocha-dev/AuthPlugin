@@ -42,7 +42,7 @@ public class AuthPlugin extends JavaPlugin {
         messageSender = new MessageSenderImpl();
         authManager = new AuthManagerImpl(databaseManager);
 
-        EventListenerManager listenerManager = new EventListenerManager(this);
+        EventListenerManager listenerManager = new EventListenerManager(this, authManager);
         listenerManager.registerEvents();
 
         commandManager = new CommandManager(this);

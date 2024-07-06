@@ -34,7 +34,7 @@ public class AuthManagerImpl implements AuthManager {
 
     @Override
     public boolean isPlayerAuthenticated(UUID playerUUID) {
-        return this.authenticatedPlayer.get(playerUUID);
+        return this.authenticatedPlayer.get(playerUUID) != null;
     }
 
     @Override
