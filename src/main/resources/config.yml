@@ -1,0 +1,10 @@
+database:
+  type: "sqlite"
+  mysql:
+    host: "localhost"
+    port: 3306
+    database: "minecraft"
+    username: "root"
+    password: "password"
+  sqlite:
+    file: "Auth/database/database.db"
