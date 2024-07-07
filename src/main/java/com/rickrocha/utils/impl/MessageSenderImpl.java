@@ -32,4 +32,10 @@ public class MessageSenderImpl implements MessageSender {
         Bukkit.getConsoleSender().sendMessage(messageUtils.convertCharacterToConsole("&e&l[WARNING]&a " + message));
     }
 
+    @Override
+    public void sendPlayerTitle(Player player, String title, String message) {
+        player.sendTitle(messageUtils.convertCharacterToConsole(title), messageUtils.convertCharacterToConsole(message),
+                5, 10, 5);
+    }
+
 }

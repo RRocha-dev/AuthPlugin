@@ -10,4 +10,6 @@ public interface MessageSender {
     void sendErrorConsoleMessage(String message);
 
     void sendWarningConsoleMessage(String message);
+
+    void sendPlayerTitle(Player player, String title, String message);
 }

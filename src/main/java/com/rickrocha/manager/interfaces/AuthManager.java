@@ -17,4 +17,6 @@ public interface AuthManager {
     public boolean registerUser(Player player, String username, String password);
 
     public boolean userExists(Player player);
+
+    public boolean validatePassword(String password, UUID playerUUID);
 }

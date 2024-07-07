@@ -1,5 +1,6 @@
 package com.rickrocha.commands;
 
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -27,14 +28,27 @@ public class LoginCommand implements PluginCommand {
             }
 
             if (!authManager.userExists(player)) {
-                messageSender.sendPlayerMessage(player, "&cUsuário não está cadastrado");
+                messageSender.sendPlayerMessage(player, "&cUser not found.");
+                return true;
+            }
+
+            if (!authManager.validatePassword(args[0], player.getUniqueId())) {
+                messageSender.sendPlayerMessage(player, "&cIncorrect password!");
+                player.playSound(player.getLocation(), Sound.ENTITY_VILLAGER_NO, 1f, 1f);
+                return true;
             }
 
             if (authManager.authenticatePlayer(player.getUniqueId())) {
                 messageSender.sendPlayerMessage(player, "&aLogin successfully.");
+                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
             } else {
                 messageSender.sendPlayerMessage(player, "&cLogin failed.");
             }
+
+            player.setMaxHealth(20.0);
+            player.setHealth(20.0);
+            player.setInvisible(false);
+
             return true;
         }
         return false;

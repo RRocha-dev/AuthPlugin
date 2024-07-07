@@ -1,5 +1,7 @@
 package com.rickrocha.listeners.player;
 
+import org.bukkit.GameMode;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -25,8 +27,22 @@ public class PlayerJoinListener implements Listener {
 
         Player player = event.getPlayer();
 
+        player.setGameMode(GameMode.SURVIVAL);
+        player.setHealth(0.1);
+        player.setMaxHealth(0.1);
+        player.setInvulnerable(true);
+
+        player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f);
+
+        if (!authManager.userExists(player)) {
+            messageSender.sendPlayerMessage(player, "&aTo log in you need to register");
+        } else {
+            messageSender.sendPlayerMessage(player,
+                    "&aHello again &f" + player.getName() + "&a, use &f/login <password> &ato authenticate.");
+        }
+
         new BukkitRunnable() {
-            int countdown = 30;
+            int countdown = 60;
 
             @Override
             public void run() {
@@ -37,10 +53,16 @@ public class PlayerJoinListener implements Listener {
                 }
 
                 String color = (countdown % 2 == 0) ? "&c" : "&e";
-                player.sendTitle(color + "Login", "To authenticate, use /login", 3, 5, 3);
+                if (!authManager.userExists(player)) {
+                    messageSender.sendPlayerTitle(player, color + "Register",
+                            "To register, use /register in " + countdown + " seconds");
+                } else {
+                    messageSender.sendPlayerTitle(player, color + "Login",
+                            "To authenticate, use /login in " + countdown + " seconds");
+                }
 
                 if (countdown <= 0) {
-                    player.kickPlayer("&cYou didn't authenticate in time!");
+                    player.kickPlayer("§cYou didn't authenticate in time!");
                     cancel();
                     return;
                 }

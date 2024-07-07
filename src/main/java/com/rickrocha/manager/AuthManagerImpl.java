@@ -27,7 +27,8 @@ public class AuthManagerImpl implements AuthManager {
     @Override
     public boolean authenticatePlayer(UUID playerUUID) {
         if (!isPlayerAuthenticated(playerUUID)) {
-            return this.authenticatedPlayer.put(playerUUID, true);
+            this.authenticatedPlayer.put(playerUUID, true);
+            return true;
         }
         return false;
     }
@@ -70,6 +71,21 @@ public class AuthManagerImpl implements AuthManager {
         try {
             connection = databaseManager.getConnection();
             return authDAO.userExists(connection, player.getUniqueId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            databaseManager.closeConnection(connection);
+        }
+        return false;
+    }
+
+    @Override
+    public boolean validatePassword(String password, UUID playerUUID) {
+        Connection connection = null;
+        try {
+            connection = databaseManager.getConnection();
+            String userPassword = authDAO.getPasswordUser(connection, playerUUID);
+            return password.equals(userPassword);
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
